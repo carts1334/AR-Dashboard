@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Reformer — KPI Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{--navy:#1F3A5F;--teal:#2E8B8B;--coral:#E8745B;--gold:#D9A441;--ink:#1c2b3a;--grey:#6B7280;--line:#e3e9ee;--bg:#f4f7f9;--card:#fff;--blue:#5B8DB8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);padding:28px;line-height:1.45}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{background:linear-gradient(120deg,var(--navy),#2b5179);color:#fff;border-radius:16px;padding:26px 30px;margin-bottom:22px}
+  header h1{font-size:25px;font-weight:700;letter-spacing:-.3px}
+  header p{opacity:.85;margin-top:6px;font-size:13.5px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 18px}
+  .kpi .v{font-size:26px;font-weight:700;color:var(--navy);letter-spacing:-.5px}
+  .kpi .l{font-size:10.5px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+  .kpi .s{font-size:11px;color:var(--teal);margin-top:5px;font-weight:600}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .card.full{grid-column:1/-1}
+  .card h2{font-size:15px;color:var(--navy);margin-bottom:3px}
+  .card .cap{font-size:11.5px;color:var(--grey);margin-bottom:14px}
+  .cw{position:relative;height:260px}
+  .funnel-stage{display:flex;align-items:center;gap:12px;margin:9px 0}
+  .funnel-stage .bar{height:34px;border-radius:7px;display:flex;align-items:center;padding:0 12px;color:#fff;font-weight:700;font-size:13px;min-width:48px}
+  .funnel-stage .lab{width:210px;font-size:12.5px;flex-shrink:0}
+  .funnel-stage .pct{font-size:11.5px;color:var(--grey);width:46px;text-align:right}
+  .note{background:#fbf5e9;border-left:3px solid var(--gold);border-radius:6px;padding:11px 14px;font-size:12px;color:#6a5a32;margin-top:14px}
+  .note b{color:#5a4a22}
+  footer{font-size:11px;color:var(--grey);text-align:center;margin-top:8px;padding:14px}
+  @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.funnel-stage .lab{width:130px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>All Reformer — KPI Dashboard</h1>
+    <p>Launch-month snapshot · as of 25 Jun 2026 · MindBody (members, sales, attendance, schedule) + Meta Ads</p>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="card full" style="margin-bottom:18px">
+    <h2>Performance scorecard — are we moving the right things in the right direction?</h2>
+    <div class="cap">Each KPI vs its boutique-fitness industry benchmark. Status = doing well or not · Trend = improving (baseline this month)</div>
+    <table id="scoreTable" style="width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px">
+      <thead><tr style="background:var(--navy);color:#fff">
+        <th style="text-align:left;padding:8px 10px">KPI</th>
+        <th style="padding:8px">Our current</th>
+        <th style="text-align:left;padding:8px">Industry benchmark</th>
+        <th style="padding:8px">Status</th>
+        <th style="padding:8px">Trend</th>
+        <th style="text-align:left;padding:8px">What good looks like</th>
+      </tr></thead>
+      <tbody id="scoreBody"></tbody>
+    </table>
+    <div class="note"><b>How to read it:</b> <b>Status</b> = where you sit vs the industry benchmark today (green good · amber watch/early · red below · grey needs more data). <b>Trend</b> = whether it's improving — this month is the baseline, so arrows (▲ better / ▼ worse) appear from next month once there are two readings. "Below" on utilisation and "Watch" on trial→member are normal at launch; the real test is that they climb month over month.</div>
+  </div>
+
+  <div class="grid">
+    <div class="card full">
+      <h2>Customer flow — acquisition funnel</h2>
+      <div class="cap">From Meta reach through to people walking in the door</div>
+      <div id="funnel"></div>
+      <div class="note"><b>Read:</b> 197 reserved the £10 founder trial, 152 converted to a paid membership (77%), 185 are active members today, and 113 have attended at least one class.</div>
+    </div>
+
+    <div class="card full">
+      <h2>Meta ad journey — spend → £10 trial</h2>
+      <div class="cap">The full top-of-funnel before someone becomes a lead in MindBody · 1–25 Jun</div>
+      <div id="metaflow"></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px">
+        <div class="cw" style="height:230px"><canvas id="metaBar"></canvas></div>
+        <div style="grid-column:span 2">
+          <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+            <thead><tr style="background:var(--teal);color:#fff"><th style="text-align:left;padding:6px 8px">Campaign</th><th style="padding:6px">Spend</th><th style="padding:6px">Clicks</th><th style="padding:6px">CTR</th><th style="padding:6px">£10 trials</th><th style="padding:6px">£/trial</th></tr></thead>
+            <tbody id="metaCamp"></tbody>
+          </table>
+          <div class="note" style="margin-top:10px"><b>Attribution — the £10 Try It IS the Meta signal:</b> it can only be bought through the Meta flow, so every purchaser is Meta-sourced. Pixel counts <b>24</b> vs <b>17</b> genuine new MindBody entrants (the gap is view-through counting + existing members re-buying via retargeting). Real cost per new Meta trial lead: <b>£14.67</b> (£249 ÷ 17). Brand Awareness & Retargeting show 0 tracked trials — they build reach but aren't optimised to convert.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card full">
+      <h2>Upgrade funnel — entry price → membership tier</h2>
+      <div class="cap">Where each client entered, and how far up the tiers they've converted</div>
+      <div id="upgrade"></div>
+      <div class="cw" style="height:240px;margin-top:10px"><canvas id="upBar"></canvas></div>
+      <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px">The £10 "Try It" trial — two ways to count an upgrade</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="background:var(--teal);color:#fff">
+          <th style="text-align:left;padding:7px 9px">View</th><th style="padding:7px">People</th>
+          <th style="padding:7px">ALL 4</th><th style="padding:7px">ALL 8</th><th style="padding:7px">ALL 12</th><th style="padding:7px">ALL 20</th><th style="padding:7px">Upgraded</th></tr></thead>
+        <tbody>
+          <tr style="background:#fbf0d5"><td style="padding:7px 9px"><b>Cold trial entrants</b> (1st purchase = All 1)</td><td align="center">17</td><td align="center">1</td><td align="center">0</td><td align="center">0</td><td align="center">0</td><td align="center"><b>1</b></td></tr>
+          <tr><td style="padding:7px 9px">Ever bought an All 1 class</td><td align="center">25</td><td align="center">3</td><td align="center">2</td><td align="center">4</td><td align="center">0</td><td align="center"><b>9</b></td></tr>
+        </tbody>
+      </table>
+      <div class="note"><b>Both numbers are real, they just answer different questions.</b> Of the 9 in the bottom row, <b>8 reserved a founder membership before</b> ever buying the £10 class — so only <b>1 (Leanne Gill → ALL 4)</b> is a genuine trial-driven upgrade. Use the top row to judge the £10 channel; all 17 entrants came in 17–22 Jun, so it's early. The founder pre-sale converts at 92% (182 of 197).</div>
+    </div>
+
+    <div class="card">
+      <h2>Revenue mix</h2>
+      <div class="cap">Where the money has come from so far</div>
+      <div class="cw"><canvas id="revMix"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Members by tier</h2>
+      <div class="cap">Upsell sits in moving ALL 4 members up</div>
+      <div class="cw"><canvas id="tiers"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2>Time to first visit</h2>
+      <div class="cap">Days from opening (or join, if later) to first class</div>
+      <div class="cw"><canvas id="lag"></canvas></div>
+      <div class="note" style="margin-top:12px">Measured from the <b>16 Jun opening</b>, so the 2 June founder pre-sale no longer inflates it. Median <b>2 days</b>; 24 attended on opening day.</div>
+    </div>
+    <div class="card">
+      <h2>Visit frequency</h2>
+      <div class="cap">Visits per member, first 10 days open</div>
+      <div class="cw"><canvas id="visits"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2>Demand by time of day</h2>
+      <div class="cap">When members book — staff &amp; capacity planning</div>
+      <div class="cw"><canvas id="byHour"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Demand by day of week</h2>
+      <div class="cap">Busiest days</div>
+      <div class="cw"><canvas id="byDow"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2>Class utilisation</h2>
+      <div class="cap">Beds filled per class — the constraint on revenue</div>
+      <div class="cw"><canvas id="util"></canvas></div>
+      <div class="note" style="margin-top:12px"><b>~19% utilised</b> (1.5 of 8 beds per class). Filling existing classes is free revenue — the biggest lever you have.</div>
+    </div>
+    <div class="card">
+      <h2>Attrition / retention</h2>
+      <div class="cap">Member status — churn tracker</div>
+      <div class="cw"><canvas id="status"></canvas></div>
+      <div class="note" style="margin-top:12px"><b>0% churn so far</b> — opened this month, nobody has lapsed yet. Meaningful next month.</div>
+    </div>
+  </div>
+
+  <div class="card full">
+    <h2>Per-customer value &amp; upsell signals</h2>
+    <div class="cap">The numbers behind spend and upselling</div>
+    <div class="cw" style="height:230px"><canvas id="spend"></canvas></div>
+  </div>
+
+  <footer>Generated from your uploaded reports. Re-run the build with fresh exports to refresh every figure.</footer>
+</div>
+
+<script>
+const M={members_total:185,mrr:6807,arpu:36.8,ltv:45.0,
+ funnel:{meta_reach:15287,meta_trial:24,unique_buyers:224,trial_reservers:197,inducted:76,bought_membership:152,active_members:185,attended:113},
+ spend:{avg:32.3,median:40.0},
+ revenue:{Memberships:5376,"Trial deposits":1574,"Drop-in":280},
+ tiers:{"ALL 4":133,"ALL 8":34,"ALL 12":8,"ALL 20":10},
+ visit_dist:{1:69,2:37,3:5,4:1,6:1},
+ lag:{"Same day (0)":24,"1-3 days":58,"4-7 days":18,"8+ days":9},lag_median:2,
+ by_hour:{"06":3,"07":10,"08":4,"09":19,"10":13,"11":13,"12":15,"13":4,"14":1,"16":9,"17":32,"18":27,"19":20,"20":7},
+ by_dow:{Mon:15,Tue:49,Wed:34,Thu:44,Fri:17,Sat:15,Sun:3},
+ util:{beds:8,avg_booked:1.49,noshow_pct:6.2},
+ meta:{cost_per_trial:10.39,spend:249.47,impressions:33986,reach:15287,link_clicks:533,landing_views:494,pixel_purchases:24,
+   ctr:1.57,cpm:7.34,cpc:0.47,lpv_rate:92.7,cost_per_lpv:0.51,lpv_to_purchase:4.9,cost_per_purchase:10.39,
+   campaigns:[
+     {n:"AR – Try It £10 – Sales",spend:207.93,clicks:473,ctr:1.69,lpv:440,trials:24,cpt:8.66},
+     {n:"Retargeting – Warm – £10",spend:14.81,clicks:18,ctr:1.27,lpv:14,trials:0,cpt:null},
+     {n:"Phase 1 – Brand Awareness",spend:26.73,clicks:42,ctr:0.90,lpv:40,trials:0,cpt:null}
+   ]},
+ upgrade:{
+   trial10:{label:"Try It – All 1 (£10)",entrants:17,tiers:{"ALL 4":1,"ALL 8":0,"ALL 12":0,"ALL 20":0},not_up:16},
+   reserve:{label:"Founder Reserve (£8.33)",entrants:197,tiers:{"ALL 4":129,"ALL 8":37,"ALL 12":7,"ALL 20":9},not_up:15},
+   direct:{label:"Direct membership",entrants:4,tiers:{"ALL 4":2,"ALL 8":0,"ALL 12":1,"ALL 20":1},not_up:0}
+ }};
+const C={navy:'#1F3A5F',teal:'#2E8B8B',coral:'#E8745B',gold:'#D9A441',grey:'#9aa6b2',blue:'#5B8DB8'};
+
+// Performance scorecard
+const ST={good:['Good','#1E7A46','#DDF0E4'],watch:['Watch / early','#9A6A00','#FBF0D5'],below:['Below','#A8331F','#F7DDD7'],baseline:['Baseline','#5A6470','#E9ECEF'],pending:['Needs data','#5A6470','#E9ECEF']};
+const SCORE=[
+ ['Class utilisation','19%','50–60% avg · 70%+ profitable','below','Launch-stage; expected to climb as the schedule fills. Your biggest revenue lever.'],
+ ['Monthly churn','0% (none yet)','2–3% top · 4–8% avg','baseline','No time to cancel yet. 50% of quitters leave within 90 days — watch the first cohort.'],
+ ['£10 trial → member','~6% (1 of 17)','25–45% paid intro','watch','Entrants are 3–8 days old — too early. Grow this with a nurture sequence.'],
+ ['No-show rate','6.2%','~10% typical','good','Below typical — healthy booking discipline.'],
+ ['Meta CTR (link)','1.6% (Try It 1.7%)','~1.7% fitness','good','On par with the fitness benchmark — creative is landing.'],
+ ['Meta cost / click','£0.47','~£1.50 (FB avg)','good','Well below average — efficient clicks.'],
+ ['Meta cost / trial lead','£8.66–£14.67','~£20+ per lead','good','Cheap acquisition; the open question is downstream conversion.'],
+ ['Visit frequency','~1.5 in first 10 days','1.5/wk avg · group 2×/wk','baseline','Window too short to annualise. Track weekly.'],
+ ['LTV : CAC','Not yet calculable','3:1+ healthy','pending','Needs standard pricing + retention. Send those to unlock it.'],
+ ['Active members','185 in month 1','— (no public norm)','good','Strong founding base. Growth rate is the metric from here.'],
+];
+document.getElementById('scoreBody').innerHTML=SCORE.map(r=>{
+ const s=ST[r[3]];
+ return `<tr style="border-bottom:1px solid var(--line)">
+  <td style="padding:8px 10px;font-weight:600">${r[0]}</td>
+  <td align="center"><b>${r[1]}</b></td>
+  <td style="padding:8px;color:#5a6b7a">${r[2]}</td>
+  <td align="center"><span style="background:${s[2]};color:${s[1]};font-weight:700;font-size:11px;padding:3px 9px;border-radius:11px;white-space:nowrap">${s[0]}</span></td>
+  <td align="center" style="color:#9aa6b2;font-size:11px">– baseline</td>
+  <td style="padding:8px;color:#41505f">${r[4]}</td></tr>`;
+}).join('');
+const conv=Math.round(M.funnel.bought_membership/M.funnel.trial_reservers*100);
+const utilPct=Math.round(M.util.avg_booked/M.util.beds*100);
+
+const kpis=[['Active members',M.members_total,''],['Monthly recurring rev','£'+M.mrr.toLocaleString(),'from autopay'],
+ ['ARPU / month','£'+M.arpu,'per member'],['Trial → member',conv+'%','conversion'],
+ ['Meta cost / trial','£'+M.meta.cost_per_trial,''],['Median time to 1st visit',M.lag_median+'d','from opening'],
+ ['Class utilisation',utilPct+'%','of 8 beds'],['No-show rate',M.util.noshow_pct+'%','of bookings']];
+document.getElementById('kpis').innerHTML=kpis.map(k=>`<div class="kpi"><div class="v">${k[1]}</div><div class="l">${k[0]}</div>${k[2]?`<div class="s">${k[2]}</div>`:''}</div>`).join('');
+
+const fstages=[['Trial reservations',M.funnel.trial_reservers,C.navy],['Unique buyers',M.funnel.unique_buyers,C.blue],
+ ['Bought membership',M.funnel.bought_membership,C.teal],['Active members',M.funnel.active_members,C.gold],
+ ['Induction booked',M.funnel.inducted,C.coral],['Attended ≥1 class',M.funnel.attended,'#7a8a99']];
+const fmax=Math.max(...fstages.map(s=>s[1]));
+document.getElementById('funnel').innerHTML=fstages.map(s=>`<div class="funnel-stage"><div class="lab">${s[0]}</div><div class="bar" style="width:${Math.round(s[1]/fmax*72)}%;background:${s[2]}">${s[1]}</div><div class="pct">${Math.round(s[1]/M.funnel.unique_buyers*100)}%</div></div>`).join('');
+
+// Meta journey flow
+const mf=[["Impressions",M.meta.impressions,"",`CPM £${M.meta.cpm}`],
+ ["People reached",M.meta.reach,"",""],
+ ["Link clicks",M.meta.link_clicks,`CTR ${M.meta.ctr}%`,`CPC £${M.meta.cpc}`],
+ ["Landing page views",M.meta.landing_views,`${M.meta.lpv_rate}% of clicks`,`£${M.meta.cost_per_lpv}/view`],
+ ["£10 trial purchases",M.meta.pixel_purchases,`${M.meta.lpv_to_purchase}% of views`,`£${M.meta.cost_per_purchase}/trial`]];
+const mfmax=Math.max(...mf.map(r=>r[1]));
+const mcols=[C.navy,'#3a5a82',C.blue,C.teal,C.gold];
+document.getElementById('metaflow').innerHTML=mf.map((r,i)=>
+ `<div class="funnel-stage"><div class="lab" style="width:170px">${r[0]}</div>`+
+ `<div class="bar" style="width:${Math.max(r[1]/mfmax*60,6)}%;background:${mcols[i]}">${r[1].toLocaleString()}</div>`+
+ `<div class="pct" style="width:auto;min-width:120px;text-align:left;color:#5a6b7a">${[r[2],r[3]].filter(Boolean).join(' · ')}</div></div>`).join('');
+document.getElementById('metaCamp').innerHTML=M.meta.campaigns.map(c=>
+ `<tr style="border-bottom:1px solid var(--line)"><td style="padding:6px 8px">${c.n}</td><td align="center">£${c.spend}</td><td align="center">${c.clicks}</td><td align="center">${c.ctr}%</td><td align="center">${c.trials}</td><td align="center">${c.cpt?'£'+c.cpt:'—'}</td></tr>`).join('');
+
+// Upgrade funnel flow (HTML stacked bars per entry door)
+const tierCol={"ALL 4":C.navy,"ALL 8":C.teal,"ALL 12":C.gold,"ALL 20":C.coral};
+const doors=[M.upgrade.trial10,M.upgrade.reserve,M.upgrade.direct];
+const dmax=Math.max(...doors.map(d=>d.entrants));
+document.getElementById('upgrade').innerHTML=
+ `<div style="display:flex;gap:14px;font-size:11px;color:var(--grey);margin-bottom:10px;flex-wrap:wrap">`+
+ Object.keys(tierCol).map(t=>`<span><span style="display:inline-block;width:11px;height:11px;border-radius:2px;background:${tierCol[t]};vertical-align:middle"></span> ${t}</span>`).join('')+
+ `<span><span style="display:inline-block;width:11px;height:11px;border-radius:2px;background:#dde3e8;vertical-align:middle"></span> Not yet upgraded</span></div>`+
+ doors.map(d=>{
+   const conv=Object.values(d.tiers).reduce((a,b)=>a+b,0);
+   const segs=Object.keys(tierCol).map(t=>d.tiers[t]?`<div title="${t}: ${d.tiers[t]}" style="width:${d.tiers[t]/dmax*100}%;background:${tierCol[t]};display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">${d.tiers[t]||''}</div>`:'').join('')
+     +(d.not_up?`<div title="Not upgraded: ${d.not_up}" style="width:${d.not_up/dmax*100}%;background:#dde3e8;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:11px;font-weight:700">${d.not_up}</div>`:'');
+   const pct=Math.round(conv/d.entrants*100);
+   return `<div style="display:flex;align-items:center;gap:12px;margin:8px 0">
+     <div style="width:180px;font-size:12.5px;font-weight:600">${d.label}<div style="font-weight:400;color:var(--grey);font-size:11px">${d.entrants} entrants · ${pct}% upgraded</div></div>
+     <div style="flex:1;display:flex;height:30px;border-radius:6px;overflow:hidden;background:#f0f3f5">${segs}</div></div>`;
+ }).join('');
+
+const O=(e={})=>Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:12}}}}},e);
+const colBar=(c='#eef2f5')=>({plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:c}},x:{grid:{display:false}}}});
+
+new Chart(revMix,{type:'doughnut',data:{labels:Object.keys(M.revenue),datasets:[{data:Object.values(M.revenue),backgroundColor:[C.teal,C.gold,C.coral],borderWidth:2,borderColor:'#fff'}]},options:O({cutout:'58%',plugins:{legend:{position:'right'},tooltip:{callbacks:{label:c=>` ${c.label}: £${c.raw.toLocaleString()}`}}}})});
+new Chart(tiers,{type:'bar',data:{labels:Object.keys(M.tiers),datasets:[{data:Object.values(M.tiers),backgroundColor:[C.navy,C.teal,C.gold,C.coral],borderRadius:6}]},options:O(colBar())});
+new Chart(lag,{type:'bar',data:{labels:Object.keys(M.lag),datasets:[{data:Object.values(M.lag),backgroundColor:[C.teal,'#4f9d9d','#8fb9b0',C.coral],borderRadius:6}]},options:O(colBar())});
+new Chart(visits,{type:'bar',data:{labels:Object.keys(M.visit_dist).map(k=>k+(k=='1'?' visit':' visits')),datasets:[{data:Object.values(M.visit_dist),backgroundColor:C.teal,borderRadius:6}]},options:O(colBar())});
+new Chart(byHour,{type:'bar',data:{labels:Object.keys(M.by_hour).map(h=>h+':00'),datasets:[{data:Object.values(M.by_hour),backgroundColor:C.blue,borderRadius:5}]},options:O(colBar())});
+new Chart(byDow,{type:'bar',data:{labels:Object.keys(M.by_dow),datasets:[{data:Object.values(M.by_dow),backgroundColor:C.gold,borderRadius:6}]},options:O(colBar())});
+new Chart(util,{type:'doughnut',data:{labels:['Booked','Empty beds'],datasets:[{data:[M.util.avg_booked,M.util.beds-M.util.avg_booked],backgroundColor:[C.teal,'#e6ebef'],borderWidth:2,borderColor:'#fff'}]},options:O({cutout:'66%',plugins:{legend:{position:'right'},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw.toFixed(1)} beds`}}}})});
+new Chart(status,{type:'doughnut',data:{labels:['Active','Cancelled','Frozen'],datasets:[{data:[M.members_total,0,0],backgroundColor:[C.teal,C.coral,C.grey],borderWidth:2,borderColor:'#fff'}]},options:O({cutout:'58%',plugins:{legend:{position:'right'}}})});
+new Chart(metaBar,{type:'bar',data:{labels:['Link clicks','Landing views','£10 trials'],datasets:[{data:[M.meta.link_clicks,M.meta.landing_views,M.meta.pixel_purchases],backgroundColor:[C.blue,C.teal,C.gold],borderRadius:6}]},options:O({plugins:{legend:{display:false},title:{display:true,text:'Clicks → trial'}},scales:{y:{beginAtZero:true,grid:{color:'#eef2f5'}},x:{grid:{display:false}}}})});
+new Chart(upBar,{type:'bar',data:{labels:doors.map(d=>d.label),datasets:Object.keys(tierCol).map(t=>({label:t,data:doors.map(d=>d.tiers[t]),backgroundColor:tierCol[t]})).concat([{label:'Not yet upgraded',data:doors.map(d=>d.not_up),backgroundColor:'#dde3e8'}])},options:O({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#eef2f5'}}},plugins:{legend:{position:'bottom'}}})});
+new Chart(spend,{type:'bar',data:{labels:['Avg spend / customer','Median spend','Avg lifetime (members)','ARPU / month'],datasets:[{data:[M.spend.avg,M.spend.median,M.ltv,M.arpu],backgroundColor:[C.blue,C.navy,C.gold,C.teal],borderRadius:6}]},options:O({indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` £${c.raw}`}}},scales:{x:{beginAtZero:true,ticks:{callback:v=>'£'+v},grid:{color:'#eef2f5'}},y:{grid:{display:false}}}})});
+</script>
+</body>
+</html>
