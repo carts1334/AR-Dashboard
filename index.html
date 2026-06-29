@@ -51,7 +51,7 @@
 <div class="wrap">
   <header>
     <h1>All Reformer — KPI Dashboard</h1>
-    <p>Launch-month snapshot · as of 25 Jun 2026 · MindBody (members, sales, attendance, schedule) + Meta Ads</p>
+    <p>Launch snapshot · as of 29 Jun 2026 · MindBody (members, sales, attendance, schedule) + Meta Ads</p>
   </header>
 
   <div class="kpis" id="kpis"></div>
@@ -78,21 +78,21 @@
       <h2>Customer flow — acquisition funnel</h2>
       <div class="cap">From Meta reach through to people walking in the door</div>
       <div id="funnel"></div>
-      <div class="note"><b>Read:</b> 197 reserved the £10 founder trial, 152 converted to a paid membership (77%), 185 are active members today, and 113 have attended at least one class.</div>
+      <div class="note"><b>Read:</b> 197 reserved the founder rate, 159 converted to a paid membership (81%), 186 are active members today, and 138 have attended at least one class.</div>
     </div>
 
     <div class="card full">
       <h2>Meta ad journey — spend → £10 trial</h2>
-      <div class="cap">The full top-of-funnel before someone becomes a lead in MindBody · 1–25 Jun</div>
+      <div class="cap">The full top-of-funnel before someone becomes a lead in MindBody · 30 May–28 Jun</div>
       <div id="metaflow"></div>
       <div class="meta-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px">
         <div class="cw" style="height:230px"><canvas id="metaBar"></canvas></div>
         <div style="grid-column:span 2">
           <table style="width:100%;border-collapse:collapse;font-size:11.5px">
-            <thead><tr style="background:var(--teal);color:#fff"><th style="text-align:left;padding:6px 8px">Campaign</th><th style="padding:6px">Spend</th><th style="padding:6px">Clicks</th><th style="padding:6px">CTR</th><th style="padding:6px">£10 trials</th><th style="padding:6px">£/trial</th></tr></thead>
+            <thead><tr style="background:var(--teal);color:#fff"><th style="text-align:left;padding:6px 8px">Ad (creative)</th><th style="padding:6px">Status</th><th style="padding:6px">Spend</th><th style="padding:6px">CTR</th><th style="padding:6px">Results</th><th style="padding:6px">£/result</th></tr></thead>
             <tbody id="metaCamp"></tbody>
           </table>
-          <div class="note" style="margin-top:10px"><b>Attribution — the £10 Try It IS the Meta signal:</b> it can only be bought through the Meta flow, so every purchaser is Meta-sourced. Pixel counts <b>24</b> vs <b>17</b> genuine new MindBody entrants (the gap is view-through counting + existing members re-buying via retargeting). Real cost per new Meta trial lead: <b>£14.67</b> (£249 ÷ 17). Brand Awareness & Retargeting show 0 tracked trials — they build reach but aren't optimised to convert.</div>
+          <div class="note" style="margin-top:10px"><b>Attribution &amp; creative watch-out:</b> Meta's pixel logged <b>106</b> results, but only <b>29</b> are genuine new cold £10-trial entrants in MindBody (the rest are founder-reserve purchases + view-through). Only <b>2 of 11 ads are live</b> — and the paused "Hook" creatives actually converted <b>cheaper</b> (£1.30–£2.90/result) than the running ad (£10.47). Worth re-testing the paused hooks.</div>
         </div>
       </div>
     </div>
@@ -108,11 +108,11 @@
           <th style="text-align:left;padding:7px 9px">View</th><th style="padding:7px">People</th>
           <th style="padding:7px">ALL 4</th><th style="padding:7px">ALL 8</th><th style="padding:7px">ALL 12</th><th style="padding:7px">ALL 20</th><th style="padding:7px">Upgraded</th></tr></thead>
         <tbody>
-          <tr style="background:#fbf0d5"><td style="padding:7px 9px"><b>Cold trial entrants</b> (1st purchase = All 1)</td><td align="center">17</td><td align="center">1</td><td align="center">0</td><td align="center">0</td><td align="center">0</td><td align="center"><b>1</b></td></tr>
-          <tr><td style="padding:7px 9px">Ever bought an All 1 class</td><td align="center">25</td><td align="center">3</td><td align="center">2</td><td align="center">4</td><td align="center">0</td><td align="center"><b>9</b></td></tr>
+          <tr style="background:#fbf0d5"><td style="padding:7px 9px"><b>Cold trial entrants</b> (1st purchase = All 1)</td><td align="center">29</td><td align="center">1</td><td align="center">0</td><td align="center">0</td><td align="center">0</td><td align="center"><b>1</b></td></tr>
+          <tr><td style="padding:7px 9px">Ever bought an All 1 class</td><td align="center">39</td><td align="center">5</td><td align="center">2</td><td align="center">4</td><td align="center">0</td><td align="center"><b>11</b></td></tr>
         </tbody>
       </table>
-      <div class="note"><b>Both numbers are real, they just answer different questions.</b> Of the 9 in the bottom row, <b>8 reserved a founder membership before</b> ever buying the £10 class — so only <b>1 (Leanne Gill → ALL 4)</b> is a genuine trial-driven upgrade. Use the top row to judge the £10 channel; all 17 entrants came in 17–22 Jun, so it's early. The founder pre-sale converts at 92% (182 of 197).</div>
+      <div class="note"><b>Both numbers are real, they just answer different questions.</b> Of the 11 in the bottom row, <b>10 reserved a founder membership before</b> ever buying the £10 class — so only <b>1</b> is a genuine trial-driven upgrade. Use the top row to judge the £10 channel: <b>29 cold entrants now, still just 1 conversion</b> — it gets people in cheaply but needs a nurture sequence to turn them into members. The founder pre-sale converts at 92% (182 of 197).</div>
     </div>
 
     <div class="card">
@@ -130,11 +130,11 @@
       <h2>Time to first visit</h2>
       <div class="cap">Days from opening (or join, if later) to first class</div>
       <div class="cw"><canvas id="lag"></canvas></div>
-      <div class="note" style="margin-top:12px">Measured from the <b>16 Jun opening</b>, so the 2 June founder pre-sale no longer inflates it. Median <b>2 days</b>; 24 attended on opening day.</div>
+      <div class="note" style="margin-top:12px">Measured from the <b>16 Jun opening</b> (or join date if later), so the founder pre-sale no longer inflates it. Median <b>2 days</b> — most come within 3 days of being able to.</div>
     </div>
     <div class="card">
       <h2>Visit frequency</h2>
-      <div class="cap">Visits per member, first 10 days open</div>
+      <div class="cap">Visits per member, since opening (20 May–29 Jun)</div>
       <div class="cw"><canvas id="visits"></canvas></div>
     </div>
 
@@ -153,7 +153,7 @@
       <h2>Class utilisation</h2>
       <div class="cap">Beds filled per class — the constraint on revenue</div>
       <div class="cw"><canvas id="util"></canvas></div>
-      <div class="note" style="margin-top:12px"><b>~19% utilised</b> (1.5 of 8 beds per class). Filling existing classes is free revenue — the biggest lever you have.</div>
+      <div class="note" style="margin-top:12px"><b>~18% utilised</b> (1.4 of 8 beds per class). Filling existing classes is free revenue — the biggest lever you have.</div>
     </div>
     <div class="card">
       <h2>Attrition / retention</h2>
@@ -173,43 +173,44 @@
 </div>
 
 <script>
-const M={members_total:185,mrr:6807,arpu:36.8,ltv:45.0,
- funnel:{meta_reach:15287,meta_trial:24,unique_buyers:224,trial_reservers:197,inducted:76,bought_membership:152,active_members:185,attended:113},
- spend:{avg:32.3,median:40.0},
- revenue:{Memberships:5376,"Trial deposits":1574,"Drop-in":280},
- tiers:{"ALL 4":133,"ALL 8":34,"ALL 12":8,"ALL 20":10},
- visit_dist:{1:69,2:37,3:5,4:1,6:1},
- lag:{"Same day (0)":24,"1-3 days":58,"4-7 days":18,"8+ days":9},lag_median:2,
- by_hour:{"06":3,"07":10,"08":4,"09":19,"10":13,"11":13,"12":15,"13":4,"14":1,"16":9,"17":32,"18":27,"19":20,"20":7},
- by_dow:{Mon:15,Tue:49,Wed:34,Thu:44,Fri:17,Sat:15,Sun:3},
- util:{beds:8,avg_booked:1.49,noshow_pct:6.2},
- meta:{cost_per_trial:10.39,spend:249.47,impressions:33986,reach:15287,link_clicks:533,landing_views:494,pixel_purchases:24,
-   ctr:1.57,cpm:7.34,cpc:0.47,lpv_rate:92.7,cost_per_lpv:0.51,lpv_to_purchase:4.9,cost_per_purchase:10.39,
-   campaigns:[
-     {n:"AR – Try It £10 – Sales",spend:207.93,clicks:473,ctr:1.69,lpv:440,trials:24,cpt:8.66},
-     {n:"Retargeting – Warm – £10",spend:14.81,clicks:18,ctr:1.27,lpv:14,trials:0,cpt:null},
-     {n:"Phase 1 – Brand Awareness",spend:26.73,clicks:42,ctr:0.90,lpv:40,trials:0,cpt:null}
-   ]},
+const M={members_total:186,mrr:6903,arpu:37.1,ltv:45.3,
+ funnel:{meta_reach:36605,meta_trial:106,unique_buyers:237,trial_reservers:197,inducted:76,bought_membership:159,active_members:186,attended:138},
+ spend:{avg:32.5,median:40.0},
+ revenue:{Memberships:5706,"Trial deposits":1574,"Drop-in":420},
+ tiers:{"ALL 4":134,"ALL 8":34,"ALL 12":8,"ALL 20":10},
+ visit_dist:{1:51,2:52,3:24,4:6,5:3,6:1,8:1},
+ lag:{"Same day (0)":13,"1-3 days":31,"4-7 days":10,"8+ days":20},lag_median:2,
+ by_hour:{"06":4,"07":12,"08":6,"09":20,"10":23,"11":16,"12":19,"13":7,"14":2,"15":1,"16":10,"17":36,"18":37,"19":23,"20":8},
+ by_dow:{Mon:28,Tue:49,Wed:36,Thu:47,Fri:26,Sat:26,Sun:12},
+ util:{beds:8,avg_booked:1.41,noshow_pct:16.2},
+ meta:{cost_per_trial:4.93,spend:522.29,impressions:73385,reach:36605,link_clicks:1010,landing_views:941,pixel_purchases:106,
+   ctr:1.38,cpm:7.12,cpc:0.52,lpv_rate:93.2,cost_per_lpv:0.56,lpv_to_purchase:11.3,cost_per_purchase:4.93,
+   ads:[{n:"Ad - Try £10 (4 creatives)",spend:345.35,clicks:698,ctr:1.52,results:33,cpr:10.47,del:"active"},
+     {n:"New Sales Ad",spend:42.65,clicks:76,ctr:2.01,results:0,cpr:null,del:"active"},
+     {n:"Hook_7_IMG_1",spend:38.08,clicks:63,ctr:0.90,results:18,cpr:2.12,del:"paused"},
+     {n:"Hook_5_IMG_1",spend:31.02,clicks:63,ctr:0.95,results:19,cpr:1.63,del:"paused"},
+     {n:"Hook_9_IMG_1",spend:24.67,clicks:50,ctr:1.29,results:19,cpr:1.30,del:"paused"},
+     {n:"Hook_13_IMG_1",spend:20.30,clicks:21,ctr:0.72,results:7,cpr:2.90,del:"paused"}]},
  upgrade:{
-   trial10:{label:"Try It – All 1 (£10)",entrants:17,tiers:{"ALL 4":1,"ALL 8":0,"ALL 12":0,"ALL 20":0},not_up:16},
+   trial10:{label:"Try It – All 1 (£10)",entrants:29,tiers:{"ALL 4":1,"ALL 8":0,"ALL 12":0,"ALL 20":0},not_up:28},
    reserve:{label:"Founder Reserve (£8.33)",entrants:197,tiers:{"ALL 4":129,"ALL 8":37,"ALL 12":7,"ALL 20":9},not_up:15},
-   direct:{label:"Direct membership",entrants:4,tiers:{"ALL 4":2,"ALL 8":0,"ALL 12":1,"ALL 20":1},not_up:0}
+   direct:{label:"Direct membership",entrants:5,tiers:{"ALL 4":3,"ALL 8":0,"ALL 12":1,"ALL 20":1},not_up:0}
  }};
 const C={navy:'#1F3A5F',teal:'#2E8B8B',coral:'#E8745B',gold:'#D9A441',grey:'#9aa6b2',blue:'#5B8DB8'};
 
 // Performance scorecard
 const ST={good:['Good','#1E7A46','#DDF0E4'],watch:['Watch / early','#9A6A00','#FBF0D5'],below:['Below','#A8331F','#F7DDD7'],baseline:['Baseline','#5A6470','#E9ECEF'],pending:['Needs data','#5A6470','#E9ECEF']};
 const SCORE=[
- ['Class utilisation','19%','50–60% avg · 70%+ profitable','below','Launch-stage; expected to climb as the schedule fills. Your biggest revenue lever.'],
- ['Monthly churn','0% (none yet)','2–3% top · 4–8% avg','baseline','No time to cancel yet. 50% of quitters leave within 90 days — watch the first cohort.'],
- ['£10 trial → member','~6% (1 of 17)','25–45% paid intro','watch','Entrants are 3–8 days old — too early. Grow this with a nurture sequence.'],
- ['No-show rate','6.2%','~10% typical','good','Below typical — healthy booking discipline.'],
- ['Meta CTR (link)','1.6% (Try It 1.7%)','~1.7% fitness','good','On par with the fitness benchmark — creative is landing.'],
- ['Meta cost / click','£0.47','~£1.50 (FB avg)','good','Well below average — efficient clicks.'],
- ['Meta cost / trial lead','£8.66–£14.67','~£20+ per lead','good','Cheap acquisition; the open question is downstream conversion.'],
- ['Visit frequency','~1.5 in first 10 days','1.5/wk avg · group 2×/wk','baseline','Window too short to annualise. Track weekly.'],
- ['LTV : CAC','Not yet calculable','3:1+ healthy','pending','Needs standard pricing + retention. Send those to unlock it.'],
- ['Active members','185 in month 1','— (no public norm)','good','Strong founding base. Growth rate is the metric from here.'],
+ ['Class utilisation','18%','50–60% avg · 70%+ profitable','below','Still launch-phase. The single biggest revenue lever — filling existing classes is free income.'],
+ ['No-show rate','16.2%','~10% typical','below','Up sharply on fuller data (45 no-shows). Add reminders / a late-cancel policy — this wastes paid-for capacity.'],
+ ['Monthly churn','0% (none yet)','2–3% top · 4–8% avg','baseline','All 186 still active. 50% of quitters leave within 90 days — the first cohort hits that window in Sept.'],
+ ['£10 trial → member','~3% (1 of 29)','25–45% paid intro','below',"Bigger sample, still only 1 conversion — the £10 channel gets people in cheaply but isn't turning them into members. Needs a nurture sequence."],
+ ['Meta cost / result','£4.93','~£20+ cost per result','good','Improved as spend scaled — cheap to acquire. Note: pixel results mix founder-reserve + £10 trials.'],
+ ['Meta CTR (link)','1.38%','~1.7% fitness','watch','Softened from 1.6% — early sign of creative fatigue. Refresh creative; you now have ad-level data to see which.'],
+ ['Meta cost / click','£0.52','~£1.50 (FB avg)','good','Still well below average — efficient clicks.'],
+ ['Visit frequency','avg 2.0 visits','1.5/wk avg · group 2×/wk','watch','Engagement building — 138 of 186 have attended, more now coming 2–3×. Watch it climb.'],
+ ['LTV : CAC','Not yet calculable','3:1+ healthy','pending','Needs standard pricing + retention. Send those and this turns into a live number.'],
+ ['Active members','186 (month 1)','— (no public norm)','good','Solid founding base. Net growth is the metric to watch from here.'],
 ];
 document.getElementById('scoreBody').innerHTML=SCORE.map(r=>{
  const s=ST[r[3]];
@@ -248,8 +249,8 @@ document.getElementById('metaflow').innerHTML=mf.map((r,i)=>
  `<div class="funnel-stage"><div class="lab" style="width:170px">${r[0]}</div>`+
  `<div class="bar" style="width:${Math.max(r[1]/mfmax*60,6)}%;background:${mcols[i]}">${r[1].toLocaleString()}</div>`+
  `<div class="pct" style="width:auto;min-width:120px;text-align:left;color:#5a6b7a">${[r[2],r[3]].filter(Boolean).join(' · ')}</div></div>`).join('');
-document.getElementById('metaCamp').innerHTML=M.meta.campaigns.map(c=>
- `<tr style="border-bottom:1px solid var(--line)"><td style="padding:6px 8px">${c.n}</td><td align="center">£${c.spend}</td><td align="center">${c.clicks}</td><td align="center">${c.ctr}%</td><td align="center">${c.trials}</td><td align="center">${c.cpt?'£'+c.cpt:'—'}</td></tr>`).join('');
+document.getElementById('metaCamp').innerHTML=M.meta.ads.map(c=>
+ `<tr style="border-bottom:1px solid var(--line)"><td style="padding:6px 8px">${c.n}</td><td align="center" style="color:${c.del==='active'?'#1E7A46':'#9aa6b2'};font-weight:600">${c.del}</td><td align="center">£${c.spend}</td><td align="center">${c.ctr}%</td><td align="center">${c.results}</td><td align="center">${c.cpr?'£'+c.cpr:'—'}</td></tr>`).join('');
 
 // Upgrade funnel flow (HTML stacked bars per entry door)
 const tierCol={"ALL 4":C.navy,"ALL 8":C.teal,"ALL 12":C.gold,"ALL 20":C.coral};
